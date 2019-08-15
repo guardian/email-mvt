@@ -24,13 +24,13 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
 </head>
 <body>
 ...
-<img alt="I track what content component a user saw" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Contributions_Banner_A&placement=1&userId=123"/>
+<img alt="I track what content component a user saw in placement 1" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Contributions_Banner_A&placement=1&userId=123"/>
 ...
-<img alt="I track what content component a user saw"src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=DigitalPack_Banner_B&placement=2&userId=123"/>
+<img alt="I track what content component a user saw in placement 2" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=DigitalPack_Banner_B&placement=2&userId=123"/>
 ...
-<img alt="I track what content component a user saw" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Newsletter_Banner_A&placement=1&userId=123"/>
+<img alt="I track what content component a user saw in placement 3" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Newsletter_Banner_A&placement=1&userId=123"/>
 ...
-<img alt="I track what content component a user saw" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=GuardianWeekly_Banner_B&placement=4&userId=123"/>
+<img alt="I track what content component a user saw in placement 4" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=GuardianWeekly_Banner_B&placement=4&userId=123"/>
 ...
 </body>
 </html>
