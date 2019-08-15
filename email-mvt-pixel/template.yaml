@@ -1,0 +1,171 @@
+Parameters:
+  Stage:
+    Type: String
+    Default: code
+    AllowedValues:
+      - code
+      - prod
+  HostedZoneID:
+    Type: String
+  TopLevelDomainTLD:
+    Type: String
+    Default: targeting.guardianapis.com
+  CloudFrontACMCertificateARN:
+    Type: String
+Resources:
+  EmailMVTPixelOriginAccessIdentityBF9A2770:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment:
+          Fn::Join:
+            - ""
+            - - Access Identity for email-
+              - Ref: Stage
+              - "."
+              - Ref: TopLevelDomainTLD
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/OriginAccessIdentity
+  EmailMVTPixelSourceS3BucketD4E04505:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Join:
+          - ""
+          - - source-email-
+            - Ref: Stage
+            - "."
+            - Ref: TopLevelDomainTLD
+      Tags:
+        - Key: Stage
+          Value:
+            Ref: Stage
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/SourceS3Bucket/Resource
+  EmailMVTPixelSourceS3BucketPolicy0376DD9D:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: EmailMVTPixelSourceS3BucketD4E04505
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt:
+                  - EmailMVTPixelOriginAccessIdentityBF9A2770
+                  - S3CanonicalUserId
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - EmailMVTPixelSourceS3BucketD4E04505
+                      - Arn
+                  - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/SourceS3Bucket/Policy/Resource
+  EmailMVTPixelCloudFrontDistributionCFDistributionE7DEDC70:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - Fn::Join:
+              - ""
+              - - email-
+                - Ref: Stage
+                - "."
+                - Ref: TopLevelDomainTLD
+        CacheBehaviors: []
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            Cookies:
+              Forward: none
+            QueryString: false
+          TargetOriginId: origin1
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - DomainName:
+              Fn::GetAtt:
+                - EmailMVTPixelSourceS3BucketD4E04505
+                - RegionalDomainName
+            Id: origin1
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - origin-access-identity/cloudfront/
+                    - Ref: EmailMVTPixelOriginAccessIdentityBF9A2770
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn:
+            Ref: CloudFrontACMCertificateARN
+          SslSupportMethod: sni-only
+      Tags:
+        - Key: Stage
+          Value:
+            Ref: Stage
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/CloudFrontDistribution/CFDistribution
+  EmailMVTPixelRoute53AAARecordAlias6676FDD1:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name:
+        Fn::Join:
+          - ""
+          - - email-
+            - Ref: Stage
+            - "."
+            - Ref: TopLevelDomainTLD
+            - "."
+      Type: AAAA
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+            - EmailMVTPixelCloudFrontDistributionCFDistributionE7DEDC70
+            - DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneId:
+        Ref: HostedZoneID
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/Route53AAARecordAlias/Resource
+  EmailMVTPixelRoute53ARecord8678A062:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name:
+        Fn::Join:
+          - ""
+          - - email-
+            - Ref: Stage
+            - "."
+            - Ref: TopLevelDomainTLD
+            - "."
+      Type: A
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+            - EmailMVTPixelCloudFrontDistributionCFDistributionE7DEDC70
+            - DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneId:
+        Ref: HostedZoneID
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/Route53ARecord/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.1.0,@aws-cdk/aws-cloudfront=1.4.0,@aws-cdk/aws-events=1.4.0,@aws-cdk/aws-iam=1.4.0,@aws-cdk/aws-kms=1.4.0,@aws-cdk/aws-route53=1.4.0,@aws-cdk/aws-route53-targets=1.4.0,@aws-cdk/aws-s3=1.4.0,@aws-cdk/core=1.4.0,@aws-cdk/cx-api=1.4.0,@aws-cdk/region-info=1.4.0,jsii-runtime=node.js/v8.11.1
+
