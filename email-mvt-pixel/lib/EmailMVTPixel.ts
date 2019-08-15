@@ -31,22 +31,25 @@ export class EmailMVTPixel extends Construct {
     return zone;
   }
 
-  createS3Bucket(bucketName: string, policyActions: string[], originAccessIdentity: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
-    const bucket = new s3.Bucket(this, 'SourceS3Bucket', {
-      bucketName: bucketName
+  createS3Bucket(idPrefix: string, bucketNameSuffix: string, policyActions: string[], encrypted: boolean, originAccessIdentity?: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
+    const bucket = new s3.Bucket(this, `${idPrefix}S3Bucket`, {
+      bucketName: `${idPrefix.toLowerCase()}-${bucketNameSuffix}`,
+      encryption: encrypted ? s3.BucketEncryption.S3_MANAGED : s3.BucketEncryption.UNENCRYPTED
     });
-    const pixelBucketPolicy = new iam.PolicyStatement({
-      actions: policyActions,
-      resources: [`${bucket.bucketArn}/*`],
-      principals: [
-        new iam.CanonicalUserPrincipal(originAccessIdentity.attrS3CanonicalUserId)
-      ]
-    });
-    bucket.addToResourcePolicy(pixelBucketPolicy);
+    if (originAccessIdentity) {
+      const pixelBucketPolicy = new iam.PolicyStatement({
+        actions: policyActions,
+        resources: [`${bucket.bucketArn}/*`],
+        principals: [
+          new iam.CanonicalUserPrincipal(originAccessIdentity.attrS3CanonicalUserId)
+        ]
+      });
+      bucket.addToResourcePolicy(pixelBucketPolicy);
+    }
     return bucket;
   }
 
-  createCFDistribution(s3BucketSource: s3.Bucket, hostedZone: route53.IHostedZone, domainName: string, certificateArn: string, originAccessIdentity: cloudfront.CfnCloudFrontOriginAccessIdentity): cloudfront.CloudFrontWebDistribution {
+  createCFDistribution(s3BucketSource: s3.Bucket, s3BucketForCFLogs: s3.Bucket, hostedZone: route53.IHostedZone, domainName: string, certificateArn: string, originAccessIdentity: cloudfront.CfnCloudFrontOriginAccessIdentity): cloudfront.CloudFrontWebDistribution {
     const distribution = new cloudfront.CloudFrontWebDistribution(this,  `CloudFrontDistribution`, {
       aliasConfiguration: {
         acmCertRef: certificateArn,
@@ -58,7 +61,10 @@ export class EmailMVTPixel extends Construct {
           originAccessIdentityId: originAccessIdentity.ref
         },
         behaviors: [{ isDefaultBehavior: true }],
-      }]
+      }],
+      loggingConfig: {
+        bucket: s3BucketForCFLogs
+      }
     });
     new route53.AaaaRecord(this, `Route53AAARecordAlias`, {
       recordName: domainName,
@@ -78,10 +84,11 @@ export class EmailMVTPixel extends Construct {
 
     const pixelDomain = `email-${props.stage.valueAsString}.${props.tld.valueAsString}`;
     const originAccessIdentity = this.createNewOriginAccessIdentity(pixelDomain);
-    const bucketForPixel = this.createS3Bucket('source-' + pixelDomain, ['s3:GetObject'], originAccessIdentity);
-    const hostedZone = this.createNewHostedZone(props.hostedZoneId.valueAsString, props.tld.valueAsString);
+    const bucketForPixel = this.createS3Bucket('Source', pixelDomain, ['s3:GetObject'], false, originAccessIdentity);
+    const bucketForCFLogs = this.createS3Bucket('Logs', pixelDomain, [''], true);
 
-    this.createCFDistribution(bucketForPixel, hostedZone, pixelDomain, props.certificateArn.valueAsString, originAccessIdentity);
+    const hostedZone = this.createNewHostedZone(props.hostedZoneId.valueAsString, props.tld.valueAsString);
+    this.createCFDistribution(bucketForPixel, bucketForCFLogs, hostedZone, pixelDomain, props.certificateArn.valueAsString, originAccessIdentity);
 
     // new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
     // new cdk.CfnOutput(this, 'DistributionId', { value: distribution.distributionId });

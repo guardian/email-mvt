@@ -68,6 +68,28 @@ Resources:
         Version: "2012-10-17"
     Metadata:
       aws:cdk:path: EmailMVTStack/EmailMVTPixel/SourceS3Bucket/Policy/Resource
+  EmailMVTPixelLogsS3BucketA1CB2D8A:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName:
+        Fn::Join:
+          - ""
+          - - logs-email-
+            - Ref: Stage
+            - "."
+            - Ref: TopLevelDomainTLD
+      Tags:
+        - Key: Stage
+          Value:
+            Ref: Stage
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: EmailMVTStack/EmailMVTPixel/LogsS3Bucket/Resource
   EmailMVTPixelCloudFrontDistributionCFDistributionE7DEDC70:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -97,6 +119,12 @@ Resources:
         Enabled: true
         HttpVersion: http2
         IPV6Enabled: true
+        Logging:
+          Bucket:
+            Fn::GetAtt:
+              - EmailMVTPixelLogsS3BucketA1CB2D8A
+              - RegionalDomainName
+          IncludeCookies: false
         Origins:
           - DomainName:
               Fn::GetAtt:
@@ -167,5 +195,5 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.1.0,@aws-cdk/aws-cloudfront=1.4.0,@aws-cdk/aws-events=1.4.0,@aws-cdk/aws-iam=1.4.0,@aws-cdk/aws-kms=1.4.0,@aws-cdk/aws-route53=1.4.0,@aws-cdk/aws-route53-targets=1.4.0,@aws-cdk/aws-s3=1.4.0,@aws-cdk/core=1.4.0,@aws-cdk/cx-api=1.4.0,@aws-cdk/region-info=1.4.0,jsii-runtime=node.js/v8.11.1
+      Modules: aws-cdk=1.4.0,@aws-cdk/aws-cloudfront=1.4.0,@aws-cdk/aws-events=1.4.0,@aws-cdk/aws-iam=1.4.0,@aws-cdk/aws-kms=1.4.0,@aws-cdk/aws-route53=1.4.0,@aws-cdk/aws-route53-targets=1.4.0,@aws-cdk/aws-s3=1.4.0,@aws-cdk/core=1.4.0,@aws-cdk/cx-api=1.4.0,@aws-cdk/region-info=1.4.0,jsii-runtime=node.js/v8.11.1
 
