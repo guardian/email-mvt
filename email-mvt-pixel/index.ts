@@ -2,8 +2,8 @@ import cdk = require('@aws-cdk/core');
 import { EmailMVTPixel } from './lib/EmailMVTPixel';
 
 export enum StackStage {
-  Code = 'code',
-  Prod = 'prod',
+  Code = 'CODE',
+  Prod = 'PROD',
 }
 
 class EmailMVTStack extends cdk.Stack {
@@ -11,10 +11,21 @@ class EmailMVTStack extends cdk.Stack {
     constructor(parent: cdk.App, name: string, props: cdk.StackProps) {
         super(parent, name, props);
 
+        const stackName =  new cdk.CfnParameter(this, 'Stack', {
+            type: 'String',
+            default: 'targeting'
+        });
+
         const stage = new cdk.CfnParameter(this, 'Stage', {
             type: 'String',
             default: StackStage.Code,
             allowedValues: [StackStage.Code, StackStage.Prod],
+        });
+
+        const stageSubdomain = new cdk.CfnParameter(this, 'Stage Subdomain', {
+            type: 'String',
+            default: StackStage.Code.toLowerCase(),
+            allowedValues: [StackStage.Code.toLocaleLowerCase(), StackStage.Prod.toLocaleLowerCase()],
         });
 
         const hostedZoneId = new cdk.CfnParameter(this, 'Hosted Zone ID', {
@@ -30,26 +41,26 @@ class EmailMVTStack extends cdk.Stack {
             type: 'String'
         });
 
+
+        this.node.applyAspect(new cdk.Tag('App', this.node.tryGetContext('App')));
+        this.node.applyAspect(new cdk.Tag('Stack', stackName.valueAsString));
         this.node.applyAspect(new cdk.Tag('Stage', stage.valueAsString));
 
-        new EmailMVTPixel(this, 'EmailMVTPixel', {
+        new EmailMVTPixel(this, this.node.tryGetContext('App'), {
             certificateArn,
             tld,
             hostedZoneId,
-            stage,
+            stageSubdomain,
         });
     }
 }
 
-const app = new cdk.App();
+const app = new cdk.App({
+    context: { 'App': 'EmailMVTPixel', 'Stack': 'targeting' }
+});
 
-new EmailMVTStack(app, 'EmailMVTStack', {
-    env: { region: 'eu-west-1' },
-    tags: {
-        App: 'EmailMVTPixel',
-        Stack: 'targeting',
-        Stage: StackStage.Code,
-    }
+new EmailMVTStack(app, app.node.tryGetContext('App'), {
+    env: { region: 'eu-west-1' }
 });
 
 app.synth();

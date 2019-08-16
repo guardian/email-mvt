@@ -22,7 +22,7 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
 <head>
 <img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
 </head>
-<body>
+<body>__
 ...
 <img alt="I track what content component a user saw in placement 1" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Contributions_Banner_A&placement=1&userId=123"/>
 ...
@@ -37,6 +37,6 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
 ``` 
 The logs are stored in an S3 bucket with a 2-week retention policy.
  
-See [here](#) for another CDK stack which defines a set of scheduled Lambda functions which 
+See [here](../email-mvt-archive) for another CDK stack which defines a set of scheduled Lambda functions which 
 shard these CloudFront logs each day into a folder where Athena plucks out the query 
 parameters into a table representing what content variants the user saw that day.

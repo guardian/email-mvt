@@ -1,5 +1,14 @@
 Parameters:
+  Stack:
+    Type: String
+    Default: targeting
   Stage:
+    Type: String
+    Default: CODE
+    AllowedValues:
+      - CODE
+      - PROD
+  StageSubdomain:
     Type: String
     Default: code
     AllowedValues:
@@ -21,11 +30,11 @@ Resources:
           Fn::Join:
             - ""
             - - Access Identity for email-
-              - Ref: Stage
+              - Ref: StageSubdomain
               - "."
               - Ref: TopLevelDomainTLD
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/OriginAccessIdentity
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/OriginAccessIdentity
   EmailMVTPixelSourceS3BucketD4E04505:
     Type: AWS::S3::Bucket
     Properties:
@@ -33,17 +42,22 @@ Resources:
         Fn::Join:
           - ""
           - - source-email-
-            - Ref: Stage
+            - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
       Tags:
+        - Key: App
+          Value: EmailMVTPixel
+        - Key: Stack
+          Value:
+            Ref: Stack
         - Key: Stage
           Value:
             Ref: Stage
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/SourceS3Bucket/Resource
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/SourceS3Bucket/Resource
   EmailMVTPixelSourceS3BucketPolicy0376DD9D:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -67,7 +81,7 @@ Resources:
                   - /*
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/SourceS3Bucket/Policy/Resource
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/SourceS3Bucket/Policy/Resource
   EmailMVTPixelLogsS3BucketA1CB2D8A:
     Type: AWS::S3::Bucket
     Properties:
@@ -79,17 +93,28 @@ Resources:
         Fn::Join:
           - ""
           - - logs-email-
-            - Ref: Stage
+            - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
+      LifecycleConfiguration:
+        Rules:
+          - AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 14
+            ExpirationInDays: 14
+            Status: Enabled
       Tags:
+        - Key: App
+          Value: EmailMVTPixel
+        - Key: Stack
+          Value:
+            Ref: Stack
         - Key: Stage
           Value:
             Ref: Stage
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/LogsS3Bucket/Resource
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/LogsS3Bucket/Resource
   EmailMVTPixelCloudFrontDistributionCFDistributionE7DEDC70:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -98,7 +123,7 @@ Resources:
           - Fn::Join:
               - ""
               - - email-
-                - Ref: Stage
+                - Ref: StageSubdomain
                 - "."
                 - Ref: TopLevelDomainTLD
         CacheBehaviors: []
@@ -143,11 +168,16 @@ Resources:
             Ref: CloudFrontACMCertificateARN
           SslSupportMethod: sni-only
       Tags:
+        - Key: App
+          Value: EmailMVTPixel
+        - Key: Stack
+          Value:
+            Ref: Stack
         - Key: Stage
           Value:
             Ref: Stage
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/CloudFrontDistribution/CFDistribution
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/CloudFrontDistribution/CFDistribution
   EmailMVTPixelRoute53AAARecordAlias6676FDD1:
     Type: AWS::Route53::RecordSet
     Properties:
@@ -155,7 +185,7 @@ Resources:
         Fn::Join:
           - ""
           - - email-
-            - Ref: Stage
+            - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
             - "."
@@ -169,7 +199,7 @@ Resources:
       HostedZoneId:
         Ref: HostedZoneID
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/Route53AAARecordAlias/Resource
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/Route53AAARecordAlias/Resource
   EmailMVTPixelRoute53ARecord8678A062:
     Type: AWS::Route53::RecordSet
     Properties:
@@ -177,7 +207,7 @@ Resources:
         Fn::Join:
           - ""
           - - email-
-            - Ref: Stage
+            - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
             - "."
@@ -191,7 +221,7 @@ Resources:
       HostedZoneId:
         Ref: HostedZoneID
     Metadata:
-      aws:cdk:path: EmailMVTStack/EmailMVTPixel/Route53ARecord/Resource
+      aws:cdk:path: EmailMVTPixel/EmailMVTPixel/Route53ARecord/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:

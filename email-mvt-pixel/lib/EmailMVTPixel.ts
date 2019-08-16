@@ -1,7 +1,7 @@
 import cdk = require('@aws-cdk/core');
 import cloudfront = require('@aws-cdk/aws-cloudfront');
 import s3 = require('@aws-cdk/aws-s3');
-import {Construct, Tag} from '@aws-cdk/core';
+import {Construct, Duration} from '@aws-cdk/core';
 import iam = require('@aws-cdk/aws-iam');
 import route53 = require('@aws-cdk/aws-route53');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
@@ -10,10 +10,16 @@ export interface EmailPixelProps {
   certificateArn: cdk.CfnParameter;
   hostedZoneId: cdk.CfnParameter;
   tld: cdk.CfnParameter;
-  stage: cdk.CfnParameter;
+  stageSubdomain: cdk.CfnParameter;
 }
 
 export class EmailMVTPixel extends Construct {
+
+  twoWeekLifecycleRule: s3.LifecycleRule = {
+    enabled: true,
+    expiration: Duration.days(14),
+    abortIncompleteMultipartUploadAfter: Duration.days(2)
+  };
 
   createNewOriginAccessIdentity(domain: string): cloudfront.CfnCloudFrontOriginAccessIdentity {
     return new cloudfront.CfnCloudFrontOriginAccessIdentity(this, `OriginAccessIdentity`, {
@@ -24,17 +30,22 @@ export class EmailMVTPixel extends Construct {
   }
 
   createNewHostedZone(zoneId: string, zoneName: string): route53.IHostedZone {
-    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
+    return route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {
       hostedZoneId: zoneId,
       zoneName: zoneName
     });
-    return zone;
   }
 
-  createS3Bucket(idPrefix: string, bucketNameSuffix: string, policyActions: string[], encrypted: boolean, originAccessIdentity?: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
+  createS3Bucket(idPrefix: string,
+                 bucketNameSuffix: string,
+                 policyActions: string[],
+                 lifecycleRules: s3.LifecycleRule[],
+                 encrypted: boolean,
+                 originAccessIdentity?: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
     const bucket = new s3.Bucket(this, `${idPrefix}S3Bucket`, {
       bucketName: `${idPrefix.toLowerCase()}-${bucketNameSuffix}`,
-      encryption: encrypted ? s3.BucketEncryption.S3_MANAGED : s3.BucketEncryption.UNENCRYPTED
+      encryption: encrypted ? s3.BucketEncryption.S3_MANAGED : s3.BucketEncryption.UNENCRYPTED,
+      lifecycleRules: lifecycleRules
     });
     if (originAccessIdentity) {
       const pixelBucketPolicy = new iam.PolicyStatement({
@@ -82,10 +93,10 @@ export class EmailMVTPixel extends Construct {
   constructor(parent: Construct, name: string, props: EmailPixelProps) {
     super(parent, name);
 
-    const pixelDomain = `email-${props.stage.valueAsString}.${props.tld.valueAsString}`;
+    const pixelDomain = `email-${props.stageSubdomain.valueAsString}.${props.tld.valueAsString}`;
     const originAccessIdentity = this.createNewOriginAccessIdentity(pixelDomain);
-    const bucketForPixel = this.createS3Bucket('Source', pixelDomain, ['s3:GetObject'], false, originAccessIdentity);
-    const bucketForCFLogs = this.createS3Bucket('Logs', pixelDomain, [''], true);
+    const bucketForPixel = this.createS3Bucket('Source', pixelDomain, ['s3:GetObject'], [], false, originAccessIdentity);
+    const bucketForCFLogs = this.createS3Bucket('Logs', pixelDomain, [''], [this.twoWeekLifecycleRule],true);
 
     const hostedZone = this.createNewHostedZone(props.hostedZoneId.valueAsString, props.tld.valueAsString);
     this.createCFDistribution(bucketForPixel, bucketForCFLogs, hostedZone, pixelDomain, props.certificateArn.valueAsString, originAccessIdentity);
