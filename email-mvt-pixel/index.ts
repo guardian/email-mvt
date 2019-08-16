@@ -1,10 +1,6 @@
 import cdk = require('@aws-cdk/core');
-import { EmailMVTPixel } from './lib/EmailMVTPixel';
-
-export enum StackStage {
-  Code = 'CODE',
-  Prod = 'PROD',
-}
+import {EmailMVTPixel} from './lib/EmailMVTPixel';
+import {StackStage} from "../shared-ts/helpers";
 
 class EmailMVTStack extends cdk.Stack {
 
@@ -41,16 +37,20 @@ class EmailMVTStack extends cdk.Stack {
         });
 
 
-        this.node.applyAspect(new cdk.Tag('App', this.node.tryGetContext('App')));
+        this.node.applyAspect(new cdk.Tag('App', name));
         this.node.applyAspect(new cdk.Tag('Stack', stackName.valueAsString));
         this.node.applyAspect(new cdk.Tag('Stage', stage.valueAsString));
 
-        new EmailMVTPixel(this, this.node.tryGetContext('App'), {
+        const infrastructure = new EmailMVTPixel(this, name, {
             certificateArn,
             tld,
             hostedZoneId,
-            stage,
             stageSubdomain,
+        });
+
+        new cdk.CfnOutput(this, `${name}CFLogs_S3Bucket_Output`, {
+            value: infrastructure.bucketForCFLogs.bucketName,
+            exportName: `EmailMVTPixel-Logs-S3Bucket-${stage.valueAsString}`
         });
     }
 }

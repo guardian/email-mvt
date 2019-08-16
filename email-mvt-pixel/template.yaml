@@ -223,7 +223,7 @@ Resources:
     Properties:
       Modules: aws-cdk=1.4.0,@aws-cdk/aws-cloudfront=1.4.0,@aws-cdk/aws-events=1.4.0,@aws-cdk/aws-iam=1.4.0,@aws-cdk/aws-kms=1.4.0,@aws-cdk/aws-route53=1.4.0,@aws-cdk/aws-route53-targets=1.4.0,@aws-cdk/aws-s3=1.4.0,@aws-cdk/core=1.4.0,@aws-cdk/cx-api=1.4.0,@aws-cdk/region-info=1.4.0,jsii-runtime=node.js/v8.11.1
 Outputs:
-  EmailMVTPixelCFLogsS3BucketOutput6C8E423D:
+  EmailMVTPixelCFLogsS3BucketOutput:
     Value:
       Ref: EmailMVTPixelLogsS3BucketA1CB2D8A
     Export:

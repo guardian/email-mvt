@@ -2,10 +2,16 @@ import iam = require('@aws-cdk/aws-iam');
 import route53 = require('@aws-cdk/aws-route53');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import cloudfront = require('@aws-cdk/aws-cloudfront');
-import {Construct, Duration} from '@aws-cdk/core';
 import s3 = require('@aws-cdk/aws-s3');
+import {Construct, Duration} from '@aws-cdk/core';
 
 export module Helper {
+
+  export const GNMRetenionPeriodLifecycleRule: s3.LifecycleRule = {
+    enabled: true,
+    expiration: Duration.days(912), // 30 months
+    abortIncompleteMultipartUploadAfter: Duration.days(2)
+  };
 
   export const twoWeekLifecycleRule: s3.LifecycleRule = {
     enabled: true,
@@ -83,4 +89,9 @@ export module Helper {
     });
     return distribution;
   }
+}
+
+export enum StackStage {
+  Code = 'CODE',
+  Prod = 'PROD',
 }
