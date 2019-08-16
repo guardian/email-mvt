@@ -17,8 +17,8 @@ export class EmailMVTPixel extends Construct {
 
     const pixelDomain = `email-${props.stageSubdomain.valueAsString}.${props.tld.valueAsString}`;
     const originAccessIdentity = Helper.createNewOriginAccessIdentity(this, pixelDomain);
-    const bucketForPixel = Helper.createS3Bucket(this,'Source', pixelDomain, ['s3:GetObject'], [], false, originAccessIdentity);
-    const bucketForCFLogs: s3.Bucket = Helper.createS3Bucket(this,'Logs', pixelDomain, [''], [Helper.twoWeekLifecycleRule],true);
+    const bucketForPixel = Helper.createS3Bucket(this,'Source', pixelDomain, ['s3:GetObject'], [], false, true, originAccessIdentity);
+    const bucketForCFLogs: s3.Bucket = Helper.createS3Bucket(this,'Logs', pixelDomain, [''], [Helper.twoWeekLifecycleRule],true, false);
 
     const hostedZone = Helper.createNewHostedZone(this, props.hostedZoneId.valueAsString, props.tld.valueAsString);
     Helper.createCFDistribution(this, bucketForPixel, bucketForCFLogs, hostedZone, pixelDomain, props.certificateArn.valueAsString, originAccessIdentity);

@@ -33,11 +33,13 @@ export module Helper {
     policyActions: string[],
     lifecycleRules: s3.LifecycleRule[],
     encrypted: boolean,
+    versioned: boolean,
     originAccessIdentity?: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
     const bucket = new s3.Bucket(construct, `${idPrefix}S3Bucket`, {
       bucketName: `${idPrefix.toLowerCase()}-${bucketNameSuffix}`,
       encryption: encrypted ? s3.BucketEncryption.S3_MANAGED : s3.BucketEncryption.UNENCRYPTED,
-      lifecycleRules: lifecycleRules
+      lifecycleRules: lifecycleRules,
+      versioned: versioned,
     });
     if (originAccessIdentity) {
       const pixelBucketPolicy = new iam.PolicyStatement({

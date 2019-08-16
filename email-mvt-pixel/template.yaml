@@ -54,6 +54,8 @@ Resources:
         - Key: Stage
           Value:
             Ref: Stage
+      VersioningConfiguration:
+        Status: Enabled
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
