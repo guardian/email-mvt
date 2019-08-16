@@ -99,7 +99,7 @@ Resources:
       LifecycleConfiguration:
         Rules:
           - AbortIncompleteMultipartUpload:
-              DaysAfterInitiation: 14
+              DaysAfterInitiation: 2
             ExpirationInDays: 14
             Status: Enabled
       Tags:
