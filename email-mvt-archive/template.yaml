@@ -66,7 +66,12 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
             Effect: Allow
-            Resource: arn:aws:logs:*:*:log-group:/aws/lambda/EmailMVTLogArchiver:*
+            Resource:
+              Fn::Join:
+                - ""
+                - - arn:aws:logs:*:*:log-group:/aws/lambda/EmailMVTLogArchiver-
+                  - Ref: Stage
+                  - :*
           - Action:
               - s3:GetObject
               - s3:ListBucket
@@ -189,7 +194,6 @@ Resources:
               - EmailMVTLogArchiver1564C123
               - Arn
           Id: Target0
-          Input: "{}"
     Metadata:
       aws:cdk:path: EmailMVTLogArchiverStack/EmailMVTLogArchiver/Rule/Resource
   CDKMetadata:

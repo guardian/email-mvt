@@ -1,5 +1,4 @@
-import cdk = require('@aws-cdk/core');
-import {Construct, Fn} from '@aws-cdk/core';
+import {Construct} from '@aws-cdk/core';
 import s3 = require('@aws-cdk/aws-s3');
 import lambda = require('@aws-cdk/aws-lambda');
 import iam = require('@aws-cdk/aws-iam');
@@ -33,7 +32,7 @@ export class EmailMVTLogArchiver extends Construct {
           actions: ['logs:CreateLogGroup']
         }),
         new iam.PolicyStatement({
-          resources: ['arn:aws:logs:*:*:log-group:/aws/lambda/EmailMVTLogArchiver:*'],
+          resources: [`arn:aws:logs:*:*:log-group:/aws/lambda/EmailMVTLogArchiver-${props.stage}:*`],
           actions: ['logs:CreateLogStream', 'logs:PutLogEvents']
         }),
         new iam.PolicyStatement({
@@ -57,11 +56,7 @@ export class EmailMVTLogArchiver extends Construct {
       schedule: events.Schedule.expression('cron(0 1 ? * * *)')
     });
 
-    rule.addTarget(new targets.LambdaFunction(lambdaToCopyFiles, {
-      event: RuleTargetInput.fromObject({
-
-      })
-    }));
+    rule.addTarget(new targets.LambdaFunction(lambdaToCopyFiles));
   }
 
 }
