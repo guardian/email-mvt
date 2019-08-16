@@ -227,5 +227,9 @@ Outputs:
     Value:
       Ref: EmailMVTPixelLogsS3BucketA1CB2D8A
     Export:
-      Name: EmailMVTPixel-Logs-S3Bucket
+      Name:
+        Fn::Join:
+          - ""
+          - - EmailMVTPixel-Logs-S3Bucket-
+            - Ref: Stage
 

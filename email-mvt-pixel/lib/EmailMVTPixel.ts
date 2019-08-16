@@ -7,6 +7,7 @@ export interface EmailPixelProps {
   certificateArn: cdk.CfnParameter;
   hostedZoneId: cdk.CfnParameter;
   tld: cdk.CfnParameter;
+  stage: cdk.CfnParameter;
   stageSubdomain: cdk.CfnParameter;
 }
 
@@ -25,7 +26,7 @@ export class EmailMVTPixel extends Construct {
 
     new cdk.CfnOutput(this, 'CFLogs_S3Bucket_Output', {
       value: bucketForCFLogs.bucketName,
-      exportName: 'EmailMVTPixel-Logs-S3Bucket'
+      exportName: `EmailMVTPixel-Logs-S3Bucket-${props.stage.valueAsString}`
     });
     // new cdk.CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
   }

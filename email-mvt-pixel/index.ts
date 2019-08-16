@@ -49,6 +49,7 @@ class EmailMVTStack extends cdk.Stack {
             certificateArn,
             tld,
             hostedZoneId,
+            stage,
             stageSubdomain,
         });
     }
