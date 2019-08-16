@@ -41,7 +41,7 @@ export class EmailMVTLogArchiver extends Construct {
         }),
         new iam.PolicyStatement({
           resources: [`arn:aws:s3:::archive-${props.sourceBucketName}/*`],
-          actions: ['s3:PutObject']
+          actions: ['s3:GetObject','s3:PutObject']
         }),
       ],
       environment: {

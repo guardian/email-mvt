@@ -94,7 +94,9 @@ Resources:
                           - - EmailMVTPixel-Logs-S3Bucket-
                             - Ref: Stage
                     - /*
-          - Action: s3:PutObject
+          - Action:
+              - s3:GetObject
+              - s3:PutObject
             Effect: Allow
             Resource:
               Fn::Join:
@@ -132,15 +134,23 @@ Resources:
             });
             const promises = objectsWithDesiredFolder.map(tuple => {
               const [source, destinationFolder] = tuple;
-              return s3.copyObject({
+              return s3.headObject({
                 Bucket: `${process.env.destination_s3_bucket}/dt=${destinationFolder}`,
-                CopySource: `${process.env.source_s3_bucket}/${source}`,
                 Key: source
-              }).promise();
+              }).promise()
+                .then(() => Promise.resolve('skipped'))
+                .catch(() => s3.copyObject({
+                  Bucket: `${process.env.destination_s3_bucket}/dt=${destinationFolder}`,
+                  CopySource: `${process.env.source_s3_bucket}/${source}`,
+                  Key: source
+                }).promise());
             });
             const results = await Promise.all(promises);
-            console.log(`Completed function. Partitioned ${results.length} objects. Returning results`);
-            return `Partitioned ${results.length} objects`;
+            const copiedResults = results.filter(value => value !== 'skipped');
+            const skippedResults = results.filter(value => value === 'skipped')
+            const log = `Copied ${copiedResults.length} objects. Skipped ${skippedResults.length} objects.`
+            console.log(log);
+            return log;
           };
       Handler: index.handler
       Role:
