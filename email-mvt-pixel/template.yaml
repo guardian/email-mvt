@@ -10,10 +10,7 @@ Parameters:
       - PROD
   StageSubdomain:
     Type: String
-    Default: code
-    AllowedValues:
-      - code
-      - prod
+    Default: email
   HostedZoneID:
     Type: String
   TopLevelDomainTLD:
@@ -29,7 +26,7 @@ Resources:
         Comment:
           Fn::Join:
             - ""
-            - - Access Identity for email-
+            - - "Access Identity for "
               - Ref: StageSubdomain
               - "."
               - Ref: TopLevelDomainTLD
@@ -41,7 +38,7 @@ Resources:
       BucketName:
         Fn::Join:
           - ""
-          - - source-email-
+          - - source-
             - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
@@ -94,7 +91,7 @@ Resources:
       BucketName:
         Fn::Join:
           - ""
-          - - logs-email-
+          - - logs-
             - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
@@ -124,8 +121,7 @@ Resources:
         Aliases:
           - Fn::Join:
               - ""
-              - - email-
-                - Ref: StageSubdomain
+              - - Ref: StageSubdomain
                 - "."
                 - Ref: TopLevelDomainTLD
         CacheBehaviors: []
@@ -186,8 +182,7 @@ Resources:
       Name:
         Fn::Join:
           - ""
-          - - email-
-            - Ref: StageSubdomain
+          - - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
             - "."
@@ -208,8 +203,7 @@ Resources:
       Name:
         Fn::Join:
           - ""
-          - - email-
-            - Ref: StageSubdomain
+          - - Ref: StageSubdomain
             - "."
             - Ref: TopLevelDomainTLD
             - "."

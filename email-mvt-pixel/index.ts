@@ -24,8 +24,7 @@ class EmailMVTStack extends cdk.Stack {
 
         const stageSubdomain = new cdk.CfnParameter(this, 'Stage Subdomain', {
             type: 'String',
-            default: StackStage.Code.toLowerCase(),
-            allowedValues: [StackStage.Code.toLocaleLowerCase(), StackStage.Prod.toLocaleLowerCase()],
+            default: 'email',
         });
 
         const hostedZoneId = new cdk.CfnParameter(this, 'Hosted Zone ID', {
