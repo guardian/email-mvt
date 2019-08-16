@@ -42,10 +42,10 @@ class EmailMVTStack extends cdk.Stack {
         this.node.applyAspect(new cdk.Tag('Stage', stage.valueAsString));
 
         const infrastructure = new EmailMVTPixel(this, name, {
-            certificateArn,
-            tld,
-            hostedZoneId,
-            stageSubdomain,
+          certificateArn: certificateArn.valueAsString,
+          tld: tld.valueAsString,
+          hostedZoneId: hostedZoneId.valueAsString,
+          stageSubdomain: stageSubdomain.valueAsString,
         });
 
         new cdk.CfnOutput(this, `${name}CFLogs_S3Bucket_Output`, {

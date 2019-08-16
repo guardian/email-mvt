@@ -4,10 +4,10 @@ import s3 = require('@aws-cdk/aws-s3');
 import {Helper} from '../../shared-ts/helpers';
 
 export interface EmailPixelProps {
-  certificateArn: cdk.CfnParameter;
-  hostedZoneId: cdk.CfnParameter;
-  tld: cdk.CfnParameter;
-  stageSubdomain: cdk.CfnParameter;
+  certificateArn: string;
+  hostedZoneId: string;
+  tld: string;
+  stageSubdomain: string;
 }
 
 export class EmailMVTPixel extends Construct {
@@ -17,12 +17,12 @@ export class EmailMVTPixel extends Construct {
   constructor(parent: Construct, name: string, props: EmailPixelProps) {
     super(parent, name);
 
-    const pixelDomain = `${props.stageSubdomain.valueAsString}.${props.tld.valueAsString}`;
+    const pixelDomain = `${props.stageSubdomain}.${props.tld}`;
     const originAccessIdentity = Helper.createNewOriginAccessIdentity(this, pixelDomain);
     const bucketForPixel = Helper.createS3Bucket(this,'Source', pixelDomain, ['s3:GetObject'], [], false, true, originAccessIdentity);
     this.bucketForCFLogs = Helper.createS3Bucket(this,'Logs', pixelDomain, [''], [Helper.twoWeekLifecycleRule],true, false);
 
-    const hostedZone = Helper.createNewHostedZone(this, props.hostedZoneId.valueAsString, props.tld.valueAsString);
-    Helper.createCFDistribution(this, bucketForPixel, this.bucketForCFLogs, hostedZone, pixelDomain, props.certificateArn.valueAsString, originAccessIdentity);
+    const hostedZone = Helper.createNewHostedZone(this, props.hostedZoneId, props.tld);
+    Helper.createCFDistribution(this, bucketForPixel, this.bucketForCFLogs, hostedZone, pixelDomain, props.certificateArn, originAccessIdentity);
   }
 }
