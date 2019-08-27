@@ -99,7 +99,7 @@ Resources:
         Rules:
           - AbortIncompleteMultipartUpload:
               DaysAfterInitiation: 2
-            ExpirationInDays: 14
+            ExpirationInDays: 28
             Status: Enabled
       Tags:
         - Key: App

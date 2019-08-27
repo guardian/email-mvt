@@ -13,9 +13,9 @@ export module Helper {
     abortIncompleteMultipartUploadAfter: Duration.days(2)
   };
 
-  export const twoWeekLifecycleRule: s3.LifecycleRule = {
+  export const fourWeekLifecycleRule: s3.LifecycleRule = {
     enabled: true,
-    expiration: Duration.days(14),
+    expiration: Duration.days(28),
     abortIncompleteMultipartUploadAfter: Duration.days(2)
   };
 
