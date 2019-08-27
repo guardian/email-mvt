@@ -1,4 +1,4 @@
-import {Construct} from '@aws-cdk/core';
+import {Construct, Duration} from '@aws-cdk/core';
 import s3 = require('@aws-cdk/aws-s3');
 import lambda = require('@aws-cdk/aws-lambda');
 import iam = require('@aws-cdk/aws-iam');
@@ -26,6 +26,7 @@ export class EmailMVTLogArchiver extends Construct {
       handler: 'index.handler',
       runtime: Runtime.NODEJS_8_10,
       functionName: `EmailMVTLogArchiver-${props.stage}`,
+      timeout: Duration.seconds(30),
       initialPolicy: [
         new iam.PolicyStatement({
           resources: ['arn:aws:logs:*:*:*'],

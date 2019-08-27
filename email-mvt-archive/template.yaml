@@ -150,6 +150,7 @@ Resources:
           - ""
           - - EmailMVTLogArchiver-
             - Ref: Stage
+      Timeout: 30
     DependsOn:
       - EmailMVTLogArchiverServiceRoleDefaultPolicy2B34FF4D
       - EmailMVTLogArchiverServiceRole3E0B7412
