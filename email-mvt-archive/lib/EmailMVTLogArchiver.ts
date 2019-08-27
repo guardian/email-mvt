@@ -12,7 +12,8 @@ import {RuleTargetInput} from "@aws-cdk/aws-events";
 
 export interface EmailMVTLogArchiverProps {
   stage: string;
-  sourceBucketName: string
+  sourceBucketName: string;
+  defaultBucketName: string;
 }
 
 export class EmailMVTLogArchiver extends Construct {
@@ -20,7 +21,6 @@ export class EmailMVTLogArchiver extends Construct {
   constructor(parent: Construct, name: string, props: EmailMVTLogArchiverProps) {
     super(parent, name);
 
-    const bucketForArchive: s3.Bucket = Helper.createS3Bucket(this,'Archive', props.sourceBucketName, [''], [Helper.GNMRetenionPeriodLifecycleRule],true, false);
     const lambdaToCopyFiles: lambda.Function = new lambda.Function(this, 'Archiver', {
       code: new lambda.InlineCode(fs.readFileSync('lambda-hander.js',{ encoding: 'utf-8' })),
       handler: 'index.handler',
@@ -46,7 +46,7 @@ export class EmailMVTLogArchiver extends Construct {
       ],
       environment: {
         'source_s3_bucket': props.sourceBucketName,
-        'destination_s3_bucket': bucketForArchive.bucketName
+        'destination_s3_bucket': props.defaultBucketName
       }
     });
 

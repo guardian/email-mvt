@@ -5,33 +5,10 @@ Parameters:
     AllowedValues:
       - CODE
       - PROD
+  DestinationBucket:
+    Type: String
+    Description: S3 bucket to copy logs into. Make sure the Lambda has write access into the bucket and that it's encrypted, has versioning disabled, and has a 28 day retention policy.
 Resources:
-  EmailMVTLogArchiverArchiveS3BucketB7DAF378:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      BucketName:
-        Fn::Join:
-          - ""
-          - - archive-
-            - Fn::ImportValue:
-                Fn::Join:
-                  - ""
-                  - - EmailMVTPixel-Logs-S3Bucket-
-                    - Ref: Stage
-      LifecycleConfiguration:
-        Rules:
-          - AbortIncompleteMultipartUpload:
-              DaysAfterInitiation: 2
-            ExpirationInDays: 912
-            Status: Enabled
-    UpdateReplacePolicy: Retain
-    DeletionPolicy: Retain
-    Metadata:
-      aws:cdk:path: EmailMVTLogArchiverStack/EmailMVTLogArchiver/ArchiveS3Bucket/Resource
   EmailMVTLogArchiverServiceRole3E0B7412:
     Type: AWS::IAM::Role
     Properties:
@@ -167,7 +144,7 @@ Resources:
                 - - EmailMVTPixel-Logs-S3Bucket-
                   - Ref: Stage
           destination_s3_bucket:
-            Ref: EmailMVTLogArchiverArchiveS3BucketB7DAF378
+            Ref: DestinationBucket
       FunctionName:
         Fn::Join:
           - ""
