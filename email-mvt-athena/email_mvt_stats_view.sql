@@ -1,6 +1,6 @@
 CREATE OR REPLACE VIEW email_mvt_stats_view AS
 WITH foo AS (
-    SELECT date, transform(split(query_string, '&'), x -> split(x, '=')) as arr FROM temp.email_mvt_cloudfront_logs_partitioned WHERE query_string LIKE '%identity_id=%'
+    SELECT date, transform(split(query_string, '&'), x -> split(x, '=')) as arr FROM email_mvt_cloudfront_logs_partitioned WHERE query_string LIKE '%identity_id=%'
 ), bar AS (
     SELECT date, filter(foo.arr, x -> cardinality(x) = 2) as tuples FROM foo
 ), baz AS (
