@@ -74,16 +74,13 @@ Resources:
           - Action:
               - s3:GetObject
               - s3:PutObject
+              - s3:PutObjectAcl
             Effect: Allow
             Resource:
               Fn::Join:
                 - ""
-                - - arn:aws:s3:::archive-
-                  - Fn::ImportValue:
-                      Fn::Join:
-                        - ""
-                        - - EmailMVTPixel-Logs-S3Bucket-
-                          - Ref: Stage
+                - - "arn:aws:s3:::"
+                  - Ref: DestinationBucket
                   - /*
         Version: "2012-10-17"
       PolicyName: EmailMVTLogArchiverServiceRoleDefaultPolicy2B34FF4D
@@ -117,6 +114,7 @@ Resources:
               }).promise()
                 .then(() => Promise.resolve('skipped'))
                 .catch(() => s3.copyObject({
+                  ACL: 'bucket-owner-read',
                   Bucket: `${process.env.destination_s3_bucket}/dt=${destinationFolder}`,
                   CopySource: `${process.env.source_s3_bucket}/${source}`,
                   Key: source

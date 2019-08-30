@@ -13,7 +13,7 @@ import {RuleTargetInput} from "@aws-cdk/aws-events";
 export interface EmailMVTLogArchiverProps {
   stage: string;
   sourceBucketName: string;
-  defaultBucketName: string;
+  destinationBucketName: string;
 }
 
 export class EmailMVTLogArchiver extends Construct {
@@ -41,13 +41,13 @@ export class EmailMVTLogArchiver extends Construct {
           actions: ['s3:GetObject', 's3:ListBucket']
         }),
         new iam.PolicyStatement({
-          resources: [`arn:aws:s3:::archive-${props.sourceBucketName}/*`],
-          actions: ['s3:GetObject','s3:PutObject']
+          resources: [`arn:aws:s3:::${props.destinationBucketName}/*`],
+          actions: ['s3:GetObject','s3:PutObject','s3:PutObjectAcl']
         }),
       ],
       environment: {
         'source_s3_bucket': props.sourceBucketName,
-        'destination_s3_bucket': props.defaultBucketName
+        'destination_s3_bucket': props.destinationBucketName
       }
     });
 

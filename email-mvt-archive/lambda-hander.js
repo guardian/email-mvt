@@ -17,6 +17,7 @@ exports.handler = async () => {
     }).promise()
       .then(() => Promise.resolve('skipped'))
       .catch(() => s3.copyObject({
+        ACL: 'bucket-owner-read',
         Bucket: `${process.env.destination_s3_bucket}/dt=${destinationFolder}`,
         CopySource: `${process.env.source_s3_bucket}/${source}`,
         Key: source
