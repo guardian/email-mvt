@@ -17,7 +17,7 @@ class EmailMVTLogArchiverStack extends cdk.Stack {
       allowedValues: [StackStage.Code, StackStage.Prod],
     });
 
-    const defaultBucketName = new cdk.CfnParameter(this, 'DestinationBucket', {
+    const destinationBucketName = new cdk.CfnParameter(this, 'DestinationBucket', {
       type: 'String',
       description: `S3 bucket to copy logs into. Make sure the Lambda has write access into the bucket and that it's encrypted, has versioning disabled, and has a 28 day retention policy.`
     });
@@ -25,7 +25,7 @@ class EmailMVTLogArchiverStack extends cdk.Stack {
     const sourceBucketName = Fn.importValue(`EmailMVTPixel-Logs-S3Bucket-${stage.valueAsString}`);
 
     // The code that defines your stack goes here
-    new EmailMVTLogArchiver(this, this.node.tryGetContext('App'), { stage: stage.valueAsString, sourceBucketName, defaultBucketName: defaultBucketName.valueAsString });
+    new EmailMVTLogArchiver(this, this.node.tryGetContext('App'), { stage: stage.valueAsString, sourceBucketName, destinationBucketName: destinationBucketName.valueAsString });
   }
 }
 
