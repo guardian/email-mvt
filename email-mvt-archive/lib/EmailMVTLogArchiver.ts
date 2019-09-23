@@ -25,7 +25,7 @@ export class EmailMVTLogArchiver extends Construct {
       code: new lambda.InlineCode(fs.readFileSync('lambda-hander.js',{ encoding: 'utf-8' })),
       handler: 'index.handler',
       runtime: Runtime.NODEJS_8_10,
-      memorySize: 256,
+      memorySize: 512,
       functionName: `EmailMVTLogArchiver-${props.stage}`,
       timeout: Duration.seconds(60),
       initialPolicy: [
