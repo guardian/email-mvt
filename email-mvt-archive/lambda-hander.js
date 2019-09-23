@@ -1,5 +1,6 @@
 const aws = require('aws-sdk');
 const s3 = new aws.S3();
+const filenameDateRegex = /(\d\d\d\d-\d\d-\d\d)-\d\d/;
 
 async function listAllObjects(s3Objects, Bucket, ContinuationToken){
   const { Contents, IsTruncated, NextContinuationToken } = await s3.listObjectsV2({ Bucket, ContinuationToken }).promise();
@@ -12,12 +13,12 @@ async function listAllObjects(s3Objects, Bucket, ContinuationToken){
 exports.handler = async () => {
   const allObjects = [];
   await listAllObjects(allObjects, process.env.source_s3_bucket);
-  const objectsWithDesiredFolder = allObjects.map(s3object => {
-    const year = '' + s3object.LastModified.getFullYear();
-    const month = '' + (s3object.LastModified.getMonth()+1);
-    const day = '' + s3object.LastModified.getDate();
-    return [s3object.Key].concat(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
-  });
+  const objectsWithDesiredFolder = allObjects
+    .filter(s3object => filenameDateRegex.test(s3object.Key))
+    .map(s3object => {
+      const dateFromFilename = s3object.Key.match(filenameDateRegex)[1];
+      return [s3object.Key, dateFromFilename];
+    });
   const promises = objectsWithDesiredFolder.map(tuple => {
     const [source, destinationFolder] = tuple;
     return s3.headObject({
