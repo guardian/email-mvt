@@ -160,7 +160,7 @@ Resources:
           - ""
           - - EmailMVTLogArchiver-
             - Ref: Stage
-      MemorySize: 512
+      MemorySize: 768
       Timeout: 60
     DependsOn:
       - EmailMVTLogArchiverServiceRoleDefaultPolicy2B34FF4D
