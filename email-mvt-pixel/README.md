@@ -20,20 +20,20 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
 
 ```html
 <html lang="en">
-<head>
-<img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
-</head>
-<body>__
-...
-<img alt="I track what content component a user saw in placement 1" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Contributions_Banner_A&placement=1&userId=123"/>
-...
-<img alt="I track what content component a user saw in placement 2" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=DigitalPack_Banner_B&placement=2&userId=123"/>
-...
-<img alt="I track what content component a user saw in placement 3" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Newsletter_Banner_A&placement=3&userId=123"/>
-...
-<img alt="I track what content component a user saw in placement 4" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=GuardianWeekly_Banner_B&placement=4&userId=123"/>
-...
-</body>
+  <head>
+    <img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
+  </head>
+  <body>
+    <!-- … -->
+    <img alt="I track what content component a user saw in placement 1" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Contributions_Banner_A&placement=1&userId=123"/>
+    <!-- … -->
+    <img alt="I track what content component a user saw in placement 2" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=DigitalPack_Banner_B&placement=2&userId=123"/>
+    <!-- … -->
+    <img alt="I track what content component a user saw in placement 3" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=Newsletter_Banner_A&placement=3&userId=123"/>
+    <!-- … -->
+    <img alt="I track what content component a user saw in placement 4" src="https://email.mvt.theguardian.com/1.gif?campaign=1&variant=GuardianWeekly_Banner_B&placement=4&userId=123"/>
+    <!-- … -->
+  </body>
 </html>
 ``` 
 The logs are stored in an S3 bucket with a 2-week retention policy.
