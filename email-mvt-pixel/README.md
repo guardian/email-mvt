@@ -18,7 +18,7 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
     
 ## Example use-case of pixel tracker in an email:
 
-```
+```html
 <html lang="en">
 <head>
 <img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
