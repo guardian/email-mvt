@@ -19,11 +19,9 @@ export module Helper {
     abortIncompleteMultipartUploadAfter: Duration.days(2)
   };
 
-  export function createNewOriginAccessIdentity(construct: Construct, domain: string): cloudfront.CfnCloudFrontOriginAccessIdentity {
-    return new cloudfront.CfnCloudFrontOriginAccessIdentity(construct, `OriginAccessIdentity`, {
-      cloudFrontOriginAccessIdentityConfig: {
+  export function createNewOriginAccessIdentity(construct: Construct, domain: string): cloudfront.OriginAccessIdentity {
+    return new cloudfront.OriginAccessIdentity(construct, `OriginAccessIdentity`, {
         comment: `Access Identity for ${domain}`
-      }
     });
   }
 
@@ -40,7 +38,7 @@ export module Helper {
     lifecycleRules: s3.LifecycleRule[],
     encrypted: boolean,
     versioned: boolean,
-    originAccessIdentity?: cloudfront.CfnCloudFrontOriginAccessIdentity): s3.Bucket {
+    originAccessIdentity?: cloudfront.OriginAccessIdentity): s3.Bucket {
     const bucket = new s3.Bucket(construct, `${idPrefix}S3Bucket`, {
       bucketName: `${idPrefix.toLowerCase()}-${bucketNameSuffix}`,
       encryption: encrypted ? s3.BucketEncryption.S3_MANAGED : s3.BucketEncryption.UNENCRYPTED,
@@ -52,7 +50,7 @@ export module Helper {
         actions: policyActions,
         resources: [`${bucket.bucketArn}/*`],
         principals: [
-          new iam.CanonicalUserPrincipal(originAccessIdentity.attrS3CanonicalUserId)
+          originAccessIdentity.grantPrincipal
         ]
       });
       bucket.addToResourcePolicy(pixelBucketPolicy);
@@ -60,7 +58,7 @@ export module Helper {
     return bucket;
   }
 
-  export function createCFDistribution(construct: Construct, s3BucketSource: s3.Bucket, s3BucketForCFLogs: s3.Bucket, hostedZone: route53.IHostedZone, domainName: string, certificateArn: string, originAccessIdentity: cloudfront.CfnCloudFrontOriginAccessIdentity): cloudfront.CloudFrontWebDistribution {
+  export function createCFDistribution(construct: Construct, s3BucketSource: s3.Bucket, s3BucketForCFLogs: s3.Bucket, hostedZone: route53.IHostedZone, domainName: string, certificateArn: string, originAccessIdentity: cloudfront.OriginAccessIdentity): cloudfront.CloudFrontWebDistribution {
     const distribution = new cloudfront.CloudFrontWebDistribution(construct,  `CloudFrontDistribution`, {
       aliasConfiguration: {
         acmCertRef: certificateArn,
@@ -69,7 +67,7 @@ export module Helper {
       originConfigs: [{
         s3OriginSource: {
           s3BucketSource: s3BucketSource,
-          originAccessIdentityId: originAccessIdentity.ref
+          originAccessIdentity: originAccessIdentity
         },
         behaviors: [{ isDefaultBehavior: true }],
       }],

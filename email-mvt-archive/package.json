@@ -7,21 +7,21 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "tsc && cdk synth > template.yaml"
+    "cdk": "tsc && cdk synth --versionReporting false > template.yaml"
   },
   "devDependencies": {
-    "@types/node": "8.10.45",
-    "typescript": "^3.3.3333",
+    "@types/node": "12.19.7",
+    "typescript": "^4.1.2",
     "ts-node": "^8.1.0",
-    "aws-cdk": "^1.4.0"
+    "aws-cdk": "^1.75.0"
   },
   "dependencies": {
-    "@aws-cdk/core": "^1.4.0",
-    "@aws-cdk/aws-s3": "^1.4.0",
-    "@aws-cdk/aws-lambda": "^1.4.0",
-    "@aws-cdk/aws-iam": "^1.4.0",
-    "@aws-cdk/aws-events": "^1.4.0",
-    "@aws-cdk/aws-events-targets": "^1.4.0",
+    "@aws-cdk/core": "^1.75.0",
+    "@aws-cdk/aws-s3": "^1.75.0",
+    "@aws-cdk/aws-lambda": "^1.75.0",
+    "@aws-cdk/aws-iam": "^1.75.0",
+    "@aws-cdk/aws-events": "^1.75.0",
+    "@aws-cdk/aws-events-targets": "^1.75.0",
     "source-map-support": "^0.5.9"
   }
 }
