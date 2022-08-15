@@ -1,0 +1,16 @@
+{
+  "projectName": "targeting:EmailMVTPixel-LogArchiver",
+  "vcsURL": "https://github.com/guardian/email-mvt/tree/master/email-mvt-archive",
+  "actions": [
+    {
+      "action": "email-mvt-pixel-log-archiver-cfn",
+      "path": "../cdk/cdk.out/EmailMvtPixelLogArchiver.template.json",
+      "compress": false
+    },
+    {
+      "action": "email-mvt-pixel-log-archiver",
+      "path": "./target/email-mvt-pixel-log-archiver-lambda.js",
+      "compress": "zip"
+    }
+  ]
+}

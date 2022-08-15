@@ -1,27 +1,34 @@
 {
   "name": "email-mvt-archive",
-  "version": "0.1.0",
-  "bin": {
-    "email-mvt-archive": "bin/EmailMVTLogArchiver.js"
-  },
+  "version": "0.2.0",
+  "description": "A Scheduled Lambda function which copies S3 files between two S3 buckets/accounts.",
+  "repository": "git@github.com:guardian/email-mvt.git",
+  "author": "The Guardian",
+  "license": "MIT",
+  "private": true,
+  "buildDir": "./target",
   "scripts": {
+    "lint": "eslint 'src/**/*.ts'",
     "build": "tsc",
-    "watch": "tsc -w",
-    "cdk": "tsc && cdk synth --versionReporting false > template.yaml"
-  },
-  "devDependencies": {
-    "@types/node": "12.19.7",
-    "typescript": "^4.1.2",
-    "ts-node": "^8.1.0",
-    "aws-cdk": "^1.75.0"
+    "upload-artifact": "node-riffraff-artifact"
   },
   "dependencies": {
-    "@aws-cdk/core": "^1.75.0",
-    "@aws-cdk/aws-s3": "^1.75.0",
-    "@aws-cdk/aws-lambda": "^1.75.0",
-    "@aws-cdk/aws-iam": "^1.75.0",
-    "@aws-cdk/aws-events": "^1.75.0",
-    "@aws-cdk/aws-events-targets": "^1.75.0",
-    "source-map-support": "^0.5.9"
+    "aws-sdk": "^2.1177.0"
+  },
+  "devDependencies": {
+    "@guardian/eslint-config-typescript": "^1.0.2",
+    "@guardian/prettier": "^1.0.0",
+    "@guardian/node-riffraff-artifact": "^0.3.2",
+    "@types/node": "^18.0.4",
+    "eslint": "^8.19.0",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "files": [
+    "lambda-handler.js"
+  ],
+  "bin": {
+    "node-riffraff-artifact": "./lambda-handler.js"
   }
 }
