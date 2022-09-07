@@ -6,7 +6,10 @@ deployments:
     type: cloud-formation
     app: EmailMVTPixelLogArchiver
     parameters:
-      templatePath: EmailMVTPixelLogArchiver.template.json
+      prefixStack: true
+      templateStagePaths:
+        TEST: EmailMVTPixelLogArchiver-CODE.template.json
+        PROD: EmailMVTPixelLogArchiver-PROD.template.json
 
   email-mvt-pixel-log-archiver:
     type: aws-lambda

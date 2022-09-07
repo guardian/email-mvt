@@ -2,7 +2,7 @@ import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
 import type { App } from 'aws-cdk-lib';
 import {Runtime} from "aws-cdk-lib/aws-lambda";
-import {Duration, RemovalPolicy} from "aws-cdk-lib";
+import {Duration} from "aws-cdk-lib";
 import {PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {Schedule} from "aws-cdk-lib/aws-events";
 import {GuScheduledLambda} from "@guardian/cdk";
@@ -12,12 +12,15 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 	constructor(scope: App, id: string, props: GuStackProps) {
 		super(scope, id, props);
 
-		const lowerCaseStage = props.stage.toLowerCase();
-		const sourceBucketNameStagePrefix = props.stage === 'PROD' ? 'logs-email.' : `logs-email-${lowerCaseStage}.`;
+		if (!(props.stage === 'TEST' || props.stage === 'PROD')) return;
+
+		const appName = 'EmailMVTPixelLogArchiverLambda';
+		const functionName = `${appName}-${props.stage}`;
+
+		const sourceBucketNameStagePrefix = props.stage === 'PROD' ? 'logs-email.' : `logs-email-test.`;
 		const sourceBucketNameSuffix = 'mvt.theguardian.com'
-		const desinationBucketNamePrefix = props.stage === 'PROD' ? '' : `${lowerCaseStage}-`;
+		const desinationBucketNamePrefix = props.stage === 'PROD' ? '' : `test-`;
 		const destinationBucketNameSuffix = 'ophan-raw-email-mvt-pixel-logs';
-		const functionName = `${id}-${props.stage}`;
 
 		// Create non-source and destination buckets
 		if (props.stage !== 'PROD') {
@@ -49,8 +52,8 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			this,
 			'TransferLambda',
 			{
-				app: id,
-				functionName,
+				app: appName,
+				functionName: functionName,
 				fileName: `email-mvt-pixel-log-archiver-lambda.zip`,
 				handler: 'email-mvt-pixel-log-archiver-lambda.handler',
 				runtime: Runtime.NODEJS_16_X,
