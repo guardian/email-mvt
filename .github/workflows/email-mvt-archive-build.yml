@@ -74,7 +74,6 @@ jobs:
                     CODE: EmailMVTPixelLogArchiver-TEST.template.json
                     PROD: EmailMVTPixelLogArchiver-PROD.template.json
                   cloudFormationStackByTags: false
-                  appendStageToCloudFormationStackName: TRUE
               email-mvt-pixel-log-archiver-lambda:
                 type: aws-lambda
                 sources:
