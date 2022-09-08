@@ -52,7 +52,7 @@ jobs:
       - name: email-mvt-archive riff-raff
         uses: guardian/actions-riff-raff@v1
         with:
-          projectName: email-mvt-pixel-log-archiver
+          app: email-mvt-pixel-log-archiver
           config: |
             stacks:
               - targeting
