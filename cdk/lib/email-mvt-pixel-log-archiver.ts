@@ -14,8 +14,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 
 		if (!(props.stage === 'TEST' || props.stage === 'PROD')) return;
 
-		const appName = 'EmailMVTPixelLogArchiverLambda';
-		const functionName = `${appName}-${props.stage}`;
+		const functionName = `EmailMVTPixelLogArchiverLambda-${props.stage}`;
 
 		const sourceBucketNameStagePrefix = props.stage === 'PROD' ? 'logs-email.' : `logs-email-test.`;
 		const sourceBucketNameSuffix = 'mvt.theguardian.com'
@@ -52,7 +51,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			this,
 			'TransferLambda',
 			{
-				app: appName,
+				app: 'email-mvt-pixel-log-archiver-lambda',
 				functionName: functionName,
 				fileName: `email-mvt-pixel-log-archiver-lambda.zip`,
 				handler: 'email-mvt-pixel-log-archiver-lambda.handler',
