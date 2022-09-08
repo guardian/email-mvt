@@ -24,6 +24,10 @@ jobs:
       - name: Use Node.js
         uses: guardian/actions-setup-node@main
 
+      - name: Set the correct Node version using nvm
+        shell: bash -l {0}
+        run: nvm install
+
       - name: Build cdk
         working-directory: ./cdk
         run: |
@@ -34,7 +38,6 @@ jobs:
       - name: Build lambda
         working-directory: ./email-mvt-archive
         run: |
-          npm install -g nvm
           nvm use
           npm install
           npm run build
