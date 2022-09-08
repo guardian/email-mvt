@@ -4,6 +4,11 @@ on: push
 
 jobs:
   email-mvt-archive-build:
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
     name: email-mvt-archive-build
     runs-on: ubuntu-latest
     steps:
