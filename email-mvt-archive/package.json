@@ -12,7 +12,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "aws-sdk": "^2.1177.0"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "^1.0.2",
