@@ -83,4 +83,4 @@ jobs:
                   bucket: targeting-dist
                   fileName: email-mvt-pixel-log-archiver-lambda.zip
                   functionNames:
-                    - EmailMVTPixelLogArchiver-
+                    - EmailMVTPixelLogArchiverLambda-
