@@ -65,12 +65,13 @@ jobs:
               email-mvt-pixel-log-archiver-cloudformation:
                 type: cloud-formation
                 sources:
-                  - cdk/cdk.out
+                  - cdk/cdk.out/EmailMVTPixelLogArchiver-TEST.template.json
+                  - cdk/cdk.out/EmailMVTPixelLogArchiver-PROD.template.json
                 app: EmailMVTPixelLogArchiver
                 parameters:
                   cloudFormationStackName: EmailMVTPixelLogArchiver
                   templateStagePaths:
-                    CODE: EmailMVTPixelLogArchiver-TEST.template.json
+                    TEST: EmailMVTPixelLogArchiver-TEST.template.json
                     PROD: EmailMVTPixelLogArchiver-PROD.template.json
                   cloudFormationStackByTags: false
               email-mvt-pixel-log-archiver-lambda:
