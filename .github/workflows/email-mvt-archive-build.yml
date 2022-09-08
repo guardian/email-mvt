@@ -27,7 +27,6 @@ jobs:
       - name: Build cdk
         working-directory: ./cdk
         run: |
-          npm install -g nvm
           nvm use
           npm install
           npm run synth
