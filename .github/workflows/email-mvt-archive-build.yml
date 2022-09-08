@@ -24,21 +24,17 @@ jobs:
       - name: Use Node.js
         uses: guardian/actions-setup-node@main
 
-      - name: Set the correct Node version using nvm
-        shell: bash -l {0}
-        run: nvm install
-
       - name: Build cdk
         working-directory: ./cdk
         run: |
-          nvm use
+          nvm install
           npm install
           npm run synth
 
       - name: Build lambda
         working-directory: ./email-mvt-archive
         run: |
-          nvm use
+          nvm install
           npm install
           npm run build
           pushd target
