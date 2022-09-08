@@ -1,0 +1,76 @@
+name: Build email-mvt-archive
+
+on: push
+
+jobs:
+  email-mvt-archive-build:
+    name: email-mvt-archive-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Use Node.js
+        uses: guardian/actions-setup-node@main
+
+      - name: Build cdk
+        working-directory: ./cdk
+        run: |
+          npm install -g nvm
+          nvm use
+          npm install
+          npm run synth
+
+      - name: Build lambda
+        working-directory: ./email-mvt-archive
+        run: |
+          npm install -g nvm
+          nvm use
+          npm install
+          npm run build
+          pushd target
+          zip -r email-mvt-pixel-log-archiver-lambda.zip ./*
+          popd
+
+      - name: email-mvt-archive riff-raff
+        uses: guardian/actions-riff-raff@v1
+        with:
+          projectName: email-mvt-pixel-log-archiver
+          config: |
+            stacks:
+              - targeting
+            regions:
+              - eu-west-1
+            allowedStages:
+              - TEST
+              - PROD
+            deployments:
+              email-mvt-pixel-log-archiver-cloudformation:
+                type: cloud-formation
+                sources:
+                  - cdk/cdk.out/EmailMVTPixelLogArchiver-TEST.template.json
+                  - cdk/cdk.out/EmailMVTPixelLogArchiver-PROD.template.json
+                app: EmailMVTPixelLogArchiver
+                parameters:
+                  cloudFormationStackName: EmailMVTPixelLogArchiver
+                  templateStagePaths:
+                    CODE: EmailMVTPixelLogArchiver-TEST.template.json
+                    PROD: EmailMVTPixelLogArchiver-PROD.template.json
+                  cloudFormationStackByTags: false
+                  appendStageToCloudFormationStackName: TRUE
+              email-mvt-pixel-log-archiver-lambda:
+                type: aws-lambda
+                sources:
+                  - email-mvt-archive/target/email-mvt-pixel-log-archiver-lambda.zip
+                parameters:
+                  prefixStack: false
+                  bucket: targeting-dist
+                  fileName: email-mvt-pixel-log-archiver-lambda.zip
+                  functionNames:
+                    - EmailMVTPixelLogArchiver-
