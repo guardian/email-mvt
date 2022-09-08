@@ -4,7 +4,12 @@
   "actions": [
     {
       "action": "email-mvt-pixel-log-archiver-cfn",
-      "path": "../cdk/cdk.out/EmailMvtPixelLogArchiver.template.json",
+      "path": "../cdk/cdk.out/EmailMvtPixelLogArchiver-TEST.template.json",
+      "compress": false
+    },
+    {
+      "action": "email-mvt-pixel-log-archiver-cfn",
+      "path": "../cdk/cdk.out/EmailMvtPixelLogArchiver-PROD.template.json",
       "compress": false
     },
     {
