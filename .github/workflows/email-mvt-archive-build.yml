@@ -44,6 +44,7 @@ jobs:
         working-directory: ./email-mvt-archive
         run: |
           npm install
+          npm run lint
           npm run build
           pushd target
           zip -r email-mvt-pixel-log-archiver-lambda.zip ./*

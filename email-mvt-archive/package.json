@@ -1,9 +1,9 @@
 {
   "name": "email-mvt-archive",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A Scheduled Lambda function which copies S3 files between two S3 buckets/accounts.",
   "repository": "git@github.com:guardian/email-mvt.git",
-  "author": "The Guardian",
+  "author": "Guardian News & Media",
   "license": "MIT",
   "private": true,
   "buildDir": "./target",
@@ -12,15 +12,15 @@
     "build": "tsc"
   },
   "dependencies": {
-    "aws-sdk": "^2.1177.0"
+    "aws-sdk": "^2.1211.0"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "^1.0.2",
-    "@guardian/prettier": "^1.0.0",
-    "@types/node": "^18.0.4",
+    "@guardian/eslint-config-typescript": "^1.0.9",
+    "@guardian/prettier": "^2.1.1",
+    "@types/node": "18.7.16",
     "eslint": "^8.19.0",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   }
 }
