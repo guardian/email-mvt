@@ -21,6 +21,7 @@ interface TransferableFile {
 }
 
 function getTransferableFiles(allS3Objects: ObjectList) {
+  const [dateToday] = new Date().toISOString().split('T');
   return allS3Objects
     .filter(s3object => s3object.Key && filenameDateRegex.test(s3object.Key))
     .map(s3object => {
@@ -29,8 +30,10 @@ function getTransferableFiles(allS3Objects: ObjectList) {
         const matches = s3objectValue.match(filenameDateRegex);
         if (matches && matches.length > 0 && matches[1]) {
           const dateFromFilename = matches[1];
-          const tuple: TransferableFile = {sourceFileName: s3objectValue, destinationFolder: dateFromFilename};
-          return tuple;
+          if (dateFromFilename < dateToday) { // Only copy over data before today
+            const tuple: TransferableFile = {sourceFileName: s3objectValue, destinationFolder: dateFromFilename};
+            return tuple;
+          }
         }
       }
     }).filter((item): item is TransferableFile => !!item);
