@@ -1,6 +1,6 @@
 name: Build email-mvt-archive
 
-on: 
+on:
   pull_request:
     branches:
       - main
@@ -87,7 +87,6 @@ jobs:
                   - email-mvt-archive/target/email-mvt-pixel-log-archiver-lambda.zip
                 parameters:
                   prefixStack: false
-                  bucket: targeting-dist
                   fileName: email-mvt-pixel-log-archiver-lambda.zip
                   functionNames:
                     - EmailMVTPixelLogArchiverLambda-
