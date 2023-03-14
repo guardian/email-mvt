@@ -9,11 +9,7 @@ import type { App } from 'aws-cdk-lib';
 import { aws_cloudfront, Duration } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ViewerCertificate } from 'aws-cdk-lib/aws-cloudfront';
-import {
-	ARecord,
-	HostedZone,
-	RecordTarget,
-} from 'aws-cdk-lib/aws-route53';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 
 interface EmailMVTPixelProps extends GuStackProps {
@@ -36,7 +32,9 @@ export class EmailMVTPixel extends GuStack {
 			app: props.app,
 		});
 
-		const domainNamePrefix = `email${(props.stage === 'PROD') ? '' : `-${props.stage.toLowerCase()}`}`;
+		const domainNamePrefix = `email${
+			props.stage === 'PROD' ? '' : `-${props.stage.toLowerCase()}`
+		}`;
 
 		const cloudfrontAlias = `${domainNamePrefix}.${hostedZoneName.valueAsString}`;
 

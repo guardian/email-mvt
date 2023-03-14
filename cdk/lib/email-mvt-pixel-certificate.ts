@@ -20,9 +20,11 @@ export class EmailMVTPixelCertificate extends GuStack {
 			description: 'Hosted Zone Name to register automatic validation',
 		});
 
-		const domainNamePrefix = `email${(props.stage === 'PROD') ? '' : `-${props.stage.toLowerCase()}`}`;
+		const domainNamePrefix = `email${
+			props.stage === 'PROD' ? '' : `-${props.stage.toLowerCase()}`
+		}`;
 
-		const domainName = `${domainNamePrefix}.${hostedZoneName.valueAsString}`
+		const domainName = `${domainNamePrefix}.${hostedZoneName.valueAsString}`;
 
 		new GuCertificate(this, {
 			app: props.app,

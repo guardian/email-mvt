@@ -1,7 +1,7 @@
 import { GuScheduledLambda } from '@guardian/cdk';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
-import { GuStringParameter } from "@guardian/cdk/lib/constructs/core/parameters/base";
+import { GuStringParameter } from '@guardian/cdk/lib/constructs/core/parameters/base';
 import { GuS3Bucket } from '@guardian/cdk/lib/constructs/s3';
 import type { App } from 'aws-cdk-lib';
 import { Duration } from 'aws-cdk-lib';
