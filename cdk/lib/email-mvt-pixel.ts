@@ -36,9 +36,9 @@ export class EmailMVTPixel extends GuStack {
 			app: props.app,
 		});
 
-		const cloudfrontAlias = `email-${props.stage.toLowerCase()}.${
-			hostedZoneName.valueAsString
-		}`;
+		const domainNamePrefix = `email${(props.stage === 'PROD') ? '' : `-${props.stage.toLowerCase()}`}`;
+
+		const cloudfrontAlias = `${domainNamePrefix}.${hostedZoneName.valueAsString}`;
 
 		const certificate = Certificate.fromCertificateArn(
 			this,
