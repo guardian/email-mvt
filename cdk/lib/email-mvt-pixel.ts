@@ -9,7 +9,7 @@ import type { App } from 'aws-cdk-lib';
 import { aws_cloudfront, Duration } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ViewerCertificate } from 'aws-cdk-lib/aws-cloudfront';
-import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { AaaaRecord, ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 
 interface EmailMVTPixelProps extends GuStackProps {
@@ -99,6 +99,13 @@ export class EmailMVTPixel extends GuStack {
 		);
 
 		new ARecord(this, 'Route53AliasToCloudFront', {
+			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+			zone: hostedZone,
+			recordName: cloudfrontAlias,
+			ttl: Duration.hours(1),
+		});
+
+		new AaaaRecord(this, 'Route53IPv6AliasToCloudFront', {
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 			zone: hostedZone,
 			recordName: cloudfrontAlias,
