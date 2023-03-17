@@ -1,6 +1,7 @@
 import { GuScheduledLambda } from '@guardian/cdk';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
+import { GuStringParameter } from '@guardian/cdk/lib/constructs/core/parameters/base';
 import { GuS3Bucket } from '@guardian/cdk/lib/constructs/s3';
 import type { App } from 'aws-cdk-lib';
 import { Duration } from 'aws-cdk-lib';
@@ -14,25 +15,17 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 
 		if (!(props.stage === 'TEST' || props.stage === 'PROD')) return;
 
+		const logFilesBucket = new GuStringParameter(this, 'Log Files Bucket', {
+			description: 'S3 bucket containing CloudFront log files to process',
+		});
+
 		const functionName = `EmailMVTPixelLogArchiverLambda-${props.stage}`;
 
-		const sourceBucketNameStagePrefix =
-			props.stage === 'PROD' ? 'logs-email.' : `logs-email-test.`;
-		const sourceBucketNameSuffix = 'mvt.theguardian.com';
 		const desinationBucketNamePrefix = props.stage === 'PROD' ? '' : `test-`;
 		const destinationBucketNameSuffix = 'ophan-raw-email-mvt-pixel-logs';
 
 		// Create non-source and destination buckets
 		if (props.stage !== 'PROD') {
-			new GuS3Bucket(this, `SourceS3Bucket`, {
-				app: id,
-				bucketName: `${sourceBucketNameStagePrefix}${sourceBucketNameSuffix}`,
-				lifecycleRules: [
-					{
-						expiration: Duration.days(28),
-					},
-				],
-			});
 			new GuS3Bucket(this, `DestinationS3Bucket`, {
 				app: id,
 				bucketName: `${desinationBucketNamePrefix}${destinationBucketNameSuffix}`,
@@ -68,8 +61,8 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 				new PolicyStatement({
 					sid: 'GiveLambdaAccessToSourceBucket',
 					resources: [
-						`arn:aws:s3:::${sourceBucketNameStagePrefix}${sourceBucketNameSuffix}`,
-						`arn:aws:s3:::${sourceBucketNameStagePrefix}${sourceBucketNameSuffix}/*`,
+						`arn:aws:s3:::${logFilesBucket.valueAsString}`,
+						`arn:aws:s3:::${logFilesBucket.valueAsString}/*`,
 					],
 					actions: ['s3:GetObject', 's3:ListBucket'],
 				}),
@@ -88,7 +81,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			],
 			monitoringConfiguration: { noMonitoring: true },
 			environment: {
-				source_s3_bucket: `${sourceBucketNameStagePrefix}${sourceBucketNameSuffix}`,
+				source_s3_bucket: logFilesBucket.valueAsString,
 				destination_s3_bucket: `${desinationBucketNamePrefix}${destinationBucketNameSuffix}`,
 			},
 		});
