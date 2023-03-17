@@ -1,27 +1,17 @@
 Email Multi-variant Targeting - Tracking Pixel
 ----------------------------------------------
 
-This folder contains the AWS CDK code to build the pixel to collect multi-variant information.
+The [../cdk](../cdk) folder contains the [GuCDK v2 code](https://github.com/guardian/cdk) to build the pixel to collect multi-variant information.
 
-In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
-
-## Instructions to build and run:
- - Setup steps (in this folder):
-    1. `brew install node`
-    2. `brew install npm`
-    3. `cd ../shared-ts && npm install && cd ../email-mvt-pixel`
-    4. `npm install`
-    
- - When you are ready to generate a new `template.yaml` file for uploading:
-    1. `npm run build`
-    2. `npm run cdk`
+In PROD the pixel tracker is deployed on the: `email.mvt.theguardian.com` domain. [See here](https://email.mvt.theguardian.com/1.gif).
     
 ## Example use-case of pixel tracker in an email:
 
 ```html
 <html lang="en">
   <head>
-    <img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
+      <title>Example for README.md</title>
+      <img alt="I only track opens" src="https://ablink.email.theguardian.com/tracker_from_the_esp.gif?foo=bar"/>
   </head>
   <body>
     <!-- … -->
@@ -36,8 +26,9 @@ In PROD this is deployed on the: `email.mvt.theguardian.com` domain.
   </body>
 </html>
 ``` 
-The logs are stored in an S3 bucket with a 2-week retention policy.
+The CloudFront logs are stored in an S3 bucket with a 2-week retention policy.
  
-See [here](../email-mvt-archive) for another CDK stack which defines a set of scheduled Lambda functions which 
-shard these CloudFront logs each day into a folder where Athena plucks out the query 
-parameters into a table representing what content variants the user saw that day.
+There is another CDK stack and [Lambda function](../email-mvt-archive) which defines a scheduled Lambda function which 
+shard these CloudFront logs each day into a folder where eventually [BigQuery](https://github.com/guardian/data-platform-models/blob/3a8aff52ab59df8c49e656afff6c96dbd6b37cae/dbt/models/datalake/braze/email_mvt_pixel_impressions.sql) 
+(or [Athena](../email-mvt-athena) if you want to debug in the AWS Targeting account) plucks out the query parameters 
+into a table representing what content variants the user saw that day.
