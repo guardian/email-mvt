@@ -15,5 +15,6 @@ jobs:
       ORG: the-guardian-cuu
       SKIP_SBT: true
       PROJECT_TAGS: Team=MarketingTools
+      NODE_VERSION_FILE: '.node-version-snyk'
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
