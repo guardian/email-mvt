@@ -8,8 +8,13 @@ import { GuS3Bucket } from '@guardian/cdk/lib/constructs/s3';
 import type { App } from 'aws-cdk-lib';
 import { aws_cloudfront, Duration } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ViewerCertificate } from 'aws-cdk-lib/aws-cloudfront';
-import { AaaaRecord, ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { HttpVersion, ViewerCertificate } from 'aws-cdk-lib/aws-cloudfront';
+import {
+	AaaaRecord,
+	ARecord,
+	HostedZone,
+	RecordTarget,
+} from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 
 interface EmailMVTPixelProps extends GuStackProps {
@@ -86,6 +91,7 @@ export class EmailMVTPixel extends GuStack {
 						behaviors: [{ isDefaultBehavior: true }],
 					},
 				],
+				httpVersion: HttpVersion.HTTP2_AND_3,
 			},
 		);
 
