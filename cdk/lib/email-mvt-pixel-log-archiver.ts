@@ -71,7 +71,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 					resources: [
 						`arn:aws:s3:::${desinationBucketNamePrefix}${destinationBucketNameSuffix}/*`,
 					],
-					actions: ['s3:GetObject', 's3:PutObject', 's3:PutObjectAcl'],
+					actions: ['s3:GetObject', 's3:PutObject'],
 				}),
 			],
 			rules: [

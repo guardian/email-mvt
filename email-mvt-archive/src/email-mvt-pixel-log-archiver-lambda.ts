@@ -50,7 +50,6 @@ function processTransfer(
     }).promise()
       .then(() => Promise.resolve('skipped'))
       .catch(() => s3.copyObject({
-        ACL: 'bucket-owner-read',
         Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
         CopySource: `${sourceS3Bucket}/${fileToTransfer.sourceFileName}`,
         Key: fileToTransfer.sourceFileName
