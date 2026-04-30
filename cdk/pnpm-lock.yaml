@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@guardian/cdk':
-        specifier: ^63.3.0
+        specifier: 63.3.0
         version: 63.3.0(aws-cdk-lib@2.241.0(constructs@10.5.1))(aws-cdk@2.1110.0)(constructs@10.5.1)
       '@guardian/eslint-config-typescript':
         specifier: 1.0.11
