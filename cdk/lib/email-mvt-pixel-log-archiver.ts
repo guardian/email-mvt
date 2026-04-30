@@ -42,7 +42,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			functionName: functionName,
 			fileName: `email-mvt-pixel-log-archiver-lambda.zip`,
 			handler: 'email-mvt-pixel-log-archiver-lambda.handler',
-			runtime: Runtime.NODEJS_16_X,
+			runtime: Runtime.NODEJS_24_X,
 			memorySize: 768,
 			timeout: Duration.seconds(60),
 			initialPolicy: [
