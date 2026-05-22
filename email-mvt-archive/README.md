@@ -6,7 +6,7 @@ This is repo containing a Lambda function which executes daily and copies the lo
  - Setup steps (in this folder):
    1. `brew install nvm`
    2. `nvm install`
-   3. `npm install`
-   4. `npm run lint`
-   5. `npm run build`
-   
+   3. `pnpm install`
+  4. `pnpm lint`
+  5. `pnpm build`
+
