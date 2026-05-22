@@ -1,11 +1,12 @@
-import { CopyObjectCommandOutput, ListObjectsV2CommandOutput, S3 } from '@aws-sdk/client-s3';
+import { S3 } from '@aws-sdk/client-s3';
+import type { CopyObjectCommandOutput, ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 
 const s3 = new S3();
 const filenameDateRegex = /(\d\d\d\d-\d\d-\d\d)-\d\d/;
 
 type S3Object = NonNullable<ListObjectsV2CommandOutput['Contents']>[number];
 
-async function listAllObjects(s3Objects: Array<S3Object>, Bucket: string, ContinuationToken?: string){
+async function listAllObjects(s3Objects: S3Object[], Bucket: string, ContinuationToken?: string){
   const { Contents, IsTruncated, NextContinuationToken } = await s3.listObjectsV2({ Bucket, ContinuationToken });
   if (Contents) {
     s3Objects.push(...Contents);
@@ -20,7 +21,7 @@ interface TransferableFile {
   destinationFolder: string;
 }
 
-function getTransferableFiles(allS3Objects: Array<S3Object>) {
+function getTransferableFiles(allS3Objects: S3Object[]) {
   const [dateToday] = new Date().toISOString().split('T');
   return allS3Objects
     .filter(s3object => s3object.Key && filenameDateRegex.test(s3object.Key))
@@ -42,7 +43,7 @@ function getTransferableFiles(allS3Objects: Array<S3Object>) {
 function processTransfer(
     transferableFiles: TransferableFile[],
     sourceS3Bucket: string,
-    destinationS3Bucket: string): Array<Promise<string | CopyObjectCommandOutput>> {
+    destinationS3Bucket: string): Array<Promise<string | false | CopyObjectCommandOutput>> {
   return transferableFiles.map(fileToTransfer => {
     return s3.headObject({
       Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
@@ -53,7 +54,8 @@ function processTransfer(
         Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
         CopySource: `${sourceS3Bucket}/${fileToTransfer.sourceFileName}`,
         Key: fileToTransfer.sourceFileName
-      }));
+      }))
+      .catch(() => false);
   });
 }
 
@@ -64,7 +66,7 @@ export async function handler() {
 
   if (!(sourceS3Bucket && destinationS3Bucket && sourceS3Bucket !== destinationS3Bucket)) return 'Invalid Environment';
 
-  const allS3Objects: Array<Object> = [];
+  const allS3Objects: S3Object[] = [];
 
   await listAllObjects(allS3Objects, sourceS3Bucket);
 

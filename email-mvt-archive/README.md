@@ -7,6 +7,6 @@ This is repo containing a Lambda function which executes daily and copies the lo
    1. `brew install nvm`
    2. `nvm install`
    3. `pnpm install`
-  4. `pnpm lint`
-  5. `pnpm build`
+   4. `pnpm lint`
+   5. `pnpm build`
 
