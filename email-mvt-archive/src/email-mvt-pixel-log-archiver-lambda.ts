@@ -46,14 +46,14 @@ function processTransfer(
     destinationS3Bucket: string): Array<Promise<string | false | CopyObjectCommandOutput>> {
   return transferableFiles.map(fileToTransfer => {
     return s3.headObject({
-      Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
-      Key: fileToTransfer.sourceFileName
+      Bucket: destinationS3Bucket,
+      Key: `dt=${fileToTransfer.destinationFolder}/${fileToTransfer.sourceFileName}`
     })
       .then(() => Promise.resolve('skipped'))
       .catch(() => s3.copyObject({
-        Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
+        Bucket: destinationS3Bucket,
         CopySource: `${sourceS3Bucket}/${fileToTransfer.sourceFileName}`,
-        Key: fileToTransfer.sourceFileName
+        Key: `dt=${fileToTransfer.destinationFolder}/${fileToTransfer.sourceFileName}`
       }))
       .catch(() => false);
   });
