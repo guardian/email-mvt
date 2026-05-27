@@ -1,12 +1,13 @@
-import type {S3} from "aws-sdk";
-import aws from "aws-sdk";
-import type {ObjectList} from "aws-sdk/clients/s3";
+import { S3 } from '@aws-sdk/client-s3';
+import type { CopyObjectCommandOutput, ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 
-const s3 = new aws.S3();
+const s3 = new S3();
 const filenameDateRegex = /(\d\d\d\d-\d\d-\d\d)-\d\d/;
 
-async function listAllObjects(s3Objects: S3.ObjectList, Bucket: string, ContinuationToken?: string){
-  const { Contents, IsTruncated, NextContinuationToken } = await s3.listObjectsV2({ Bucket, ContinuationToken }).promise();
+type S3Object = NonNullable<ListObjectsV2CommandOutput['Contents']>[number];
+
+async function listAllObjects(s3Objects: S3Object[], Bucket: string, ContinuationToken?: string){
+  const { Contents, IsTruncated, NextContinuationToken } = await s3.listObjectsV2({ Bucket, ContinuationToken });
   if (Contents) {
     s3Objects.push(...Contents);
   }
@@ -20,7 +21,7 @@ interface TransferableFile {
   destinationFolder: string;
 }
 
-function getTransferableFiles(allS3Objects: ObjectList) {
+function getTransferableFiles(allS3Objects: S3Object[]) {
   const [dateToday] = new Date().toISOString().split('T');
   return allS3Objects
     .filter(s3object => s3object.Key && filenameDateRegex.test(s3object.Key))
@@ -42,18 +43,19 @@ function getTransferableFiles(allS3Objects: ObjectList) {
 function processTransfer(
     transferableFiles: TransferableFile[],
     sourceS3Bucket: string,
-    destinationS3Bucket: string): Array<Promise<string | S3.Types.CopyObjectOutput>> {
+    destinationS3Bucket: string): Array<Promise<string | false | CopyObjectCommandOutput>> {
   return transferableFiles.map(fileToTransfer => {
     return s3.headObject({
-      Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
-      Key: fileToTransfer.sourceFileName
-    }).promise()
+      Bucket: destinationS3Bucket,
+      Key: `dt=${fileToTransfer.destinationFolder}/${fileToTransfer.sourceFileName}`
+    })
       .then(() => Promise.resolve('skipped'))
       .catch(() => s3.copyObject({
-        Bucket: `${destinationS3Bucket}/dt=${fileToTransfer.destinationFolder}`,
+        Bucket: destinationS3Bucket,
         CopySource: `${sourceS3Bucket}/${fileToTransfer.sourceFileName}`,
-        Key: fileToTransfer.sourceFileName
-      }).promise());
+        Key: `dt=${fileToTransfer.destinationFolder}/${fileToTransfer.sourceFileName}`
+      }))
+      .catch(() => false);
   });
 }
 
@@ -64,7 +66,7 @@ export async function handler() {
 
   if (!(sourceS3Bucket && destinationS3Bucket && sourceS3Bucket !== destinationS3Bucket)) return 'Invalid Environment';
 
-  const allS3Objects: ObjectList = [];
+  const allS3Objects: S3Object[] = [];
 
   await listAllObjects(allS3Objects, sourceS3Bucket);
 
