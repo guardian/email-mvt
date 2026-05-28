@@ -44,7 +44,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			handler: 'email-mvt-pixel-log-archiver-lambda.handler',
 			runtime: Runtime.NODEJS_24_X,
 			memorySize: 768,
-			timeout: Duration.seconds(60),
+			timeout: Duration.seconds(120),
 			initialPolicy: [
 				new PolicyStatement({
 					sid: 'CreateLogGroupForFunction',
