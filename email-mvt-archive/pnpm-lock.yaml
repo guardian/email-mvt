@@ -31,8 +31,8 @@ importers:
         specifier: 2.7.1
         version: 2.7.1
       ts-node:
-        specifier: 10.9.1
-        version: 10.9.1(@types/node@18.7.16)(typescript@4.8.2)
+        specifier: 10.9.2
+        version: 10.9.2(@types/node@18.7.16)(typescript@4.8.2)
       typescript:
         specifier: 4.8.2
         version: 4.8.2
@@ -1419,8 +1419,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  ts-node@10.9.1:
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+  ts-node@10.9.2:
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
@@ -3205,7 +3205,7 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  ts-node@10.9.1(@types/node@18.7.16)(typescript@4.8.2):
+  ts-node@10.9.2(@types/node@18.7.16)(typescript@4.8.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
