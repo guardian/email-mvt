@@ -42,9 +42,9 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 			functionName: functionName,
 			fileName: `email-mvt-pixel-log-archiver-lambda.zip`,
 			handler: 'email-mvt-pixel-log-archiver-lambda.handler',
-			runtime: Runtime.NODEJS_16_X,
+			runtime: Runtime.NODEJS_24_X,
 			memorySize: 768,
-			timeout: Duration.seconds(60),
+			timeout: Duration.seconds(120),
 			initialPolicy: [
 				new PolicyStatement({
 					sid: 'CreateLogGroupForFunction',
@@ -71,7 +71,7 @@ export class EmailMVTPixelLogArchiver extends GuStack {
 					resources: [
 						`arn:aws:s3:::${desinationBucketNamePrefix}${destinationBucketNameSuffix}/*`,
 					],
-					actions: ['s3:GetObject', 's3:PutObject', 's3:PutObjectAcl'],
+					actions: ['s3:GetObject', 's3:PutObject'],
 				}),
 			],
 			rules: [
