@@ -14,7 +14,7 @@
 	"devDependencies": {
 		"@guardian/eslint-config-typescript": "1.0.9",
 		"@guardian/prettier": "2.1.1",
-		"@types/node": "18.7.16",
+		"@types/node": "26.6.4",
 		"esbuild": "0.28.1",
 		"eslint": "8.22.0",
 		"prettier": "2.7.1",
