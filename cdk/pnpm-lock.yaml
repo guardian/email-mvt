@@ -17,7 +17,7 @@ importers:
     devDependencies:
       '@guardian/cdk':
         specifier: 63.3.0
-        version: 63.3.0(aws-cdk-lib@2.260.0(constructs@10.5.1))(aws-cdk@2.1133.0)(constructs@10.5.1)
+        version: 63.3.0(aws-cdk-lib@2.260.0(constructs@10.8.1))(aws-cdk@2.1133.0)(constructs@10.8.1)
       '@guardian/eslint-config-typescript':
         specifier: 1.0.11
         version: 1.0.11(eslint@8.36.0)(typescript@4.8.4)
@@ -35,10 +35,10 @@ importers:
         version: 2.1133.0
       aws-cdk-lib:
         specifier: 2.260.0
-        version: 2.260.0(constructs@10.5.1)
+        version: 2.260.0(constructs@10.8.1)
       constructs:
-        specifier: 10.5.1
-        version: 10.5.1
+        specifier: 10.8.1
+        version: 10.8.1
       eslint:
         specifier: 8.36.0
         version: 8.36.0
@@ -1093,8 +1093,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  constructs@10.5.1:
-    resolution: {integrity: sha512-f/TfFXiS3G/yVIXDjOQn9oTlyu9Wo7Fxyjj7lb8r92iO81jR2uST+9MstxZTmDGx/CgIbxCXkFXgupnLTNxQZg==}
+  constructs@10.8.1:
+    resolution: {integrity: sha512-98yGXYyhePqPYh3cYu8nzBERmAhC0DONe3UD03okK0nehZ7hYP4wgZuf02a04+uOWxnTJ5Rpp5m0GRNpwyLGGA==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -3347,16 +3347,16 @@ snapshots:
 
   '@eslint/js@8.36.0': {}
 
-  '@guardian/cdk@63.3.0(aws-cdk-lib@2.260.0(constructs@10.5.1))(aws-cdk@2.1133.0)(constructs@10.5.1)':
+  '@guardian/cdk@63.3.0(aws-cdk-lib@2.260.0(constructs@10.8.1))(aws-cdk@2.1133.0)(constructs@10.8.1)':
     dependencies:
       '@aws-sdk/client-ec2': 3.1039.0
       '@aws-sdk/client-ssm': 3.1039.0
       '@aws-sdk/credential-providers': 3.1039.0
       aws-cdk: 2.1133.0
-      aws-cdk-lib: 2.260.0(constructs@10.5.1)
+      aws-cdk-lib: 2.260.0(constructs@10.8.1)
       chalk: 4.1.2
       codemaker: 1.128.0
-      constructs: 10.5.1
+      constructs: 10.8.1
       git-url-parse: 16.1.0
       js-yaml: 4.3.2
       read-pkg-up: 7.0.1
@@ -4142,12 +4142,12 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  aws-cdk-lib@2.260.0(constructs@10.5.1):
+  aws-cdk-lib@2.260.0(constructs@10.8.1):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.282
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.2
       '@aws-cdk/cloud-assembly-schema': 54.14.0
-      constructs: 10.5.1
+      constructs: 10.8.1
 
   aws-cdk@2.1133.0: {}
 
@@ -4299,7 +4299,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  constructs@10.5.1: {}
+  constructs@10.8.1: {}
 
   convert-source-map@2.0.0: {}
 
