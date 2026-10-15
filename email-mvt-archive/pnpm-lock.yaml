@@ -20,8 +20,8 @@ importers:
         specifier: 1.0.9
         version: 1.0.9(eslint@8.22.0)(typescript@4.9.5)
       '@guardian/prettier':
-        specifier: 2.1.1
-        version: 2.1.1(prettier@2.7.1)
+        specifier: 2.1.5
+        version: 2.1.5(prettier@2.7.1)
       '@types/node':
         specifier: 18.7.16
         version: 18.7.16
@@ -337,8 +337,8 @@ packages:
     peerDependencies:
       eslint: ^8.0.0
 
-  '@guardian/prettier@2.1.1':
-    resolution: {integrity: sha512-QFTwJilWDA0t3IMizJwKi9ykqbBlB3Vzd2dC+1Fjx5A7ffHfc5DPcBQxsnsCuznK3Cj/BhCASzJsEDAnBbB5sg==}
+  '@guardian/prettier@2.1.5':
+    resolution: {integrity: sha512-4fehERf5HHS9Nkaw+4u5EZ1OrFEHL4lYhLUWkpwEx4VmHI+RgcMezfDfosb3TD8cPFCKakrpdQEJUwNP283SJw==}
     peerDependencies:
       prettier: ^2.4.0
 
@@ -1922,7 +1922,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  '@guardian/prettier@2.1.1(prettier@2.7.1)':
+  '@guardian/prettier@2.1.5(prettier@2.7.1)':
     dependencies:
       prettier: 2.7.1
 
