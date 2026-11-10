@@ -17,7 +17,7 @@ importers:
     devDependencies:
       '@guardian/cdk':
         specifier: 64.2.0
-        version: 64.2.0(aws-cdk-lib@2.274.0(constructs@10.8.1))(aws-cdk@2.1146.0)(constructs@10.8.1)
+        version: 64.2.0(aws-cdk-lib@2.275.0(constructs@10.8.1))(aws-cdk@2.1146.0)(constructs@10.8.1)
       '@guardian/eslint-config-typescript':
         specifier: 1.0.11
         version: 1.0.11(eslint@8.36.0)(typescript@4.9.5)
@@ -34,8 +34,8 @@ importers:
         specifier: 2.1146.0
         version: 2.1146.0
       aws-cdk-lib:
-        specifier: 2.274.0
-        version: 2.274.0(constructs@10.8.1)
+        specifier: 2.275.0
+        version: 2.275.0(constructs@10.8.1)
       constructs:
         specifier: 10.8.1
         version: 10.8.1
@@ -628,6 +628,7 @@ packages:
   '@smithy/core@3.36.0':
     resolution: {integrity: sha512-3hJiwG1F5t1SoXqp/yOCmYXziyx7ZVqF63S5W6YU201e/qwVaHPex+E/3vvyY9a3ORq/b+BydeNZpP2saQ9X2g==}
     engines: {node: '>=18.0.0'}
+    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/credential-provider-imds@4.5.2':
     resolution: {integrity: sha512-A9uSdn72ozbRUSit0eib0TW7nXuNPlaeM0zcGkJ+nE6tFcSDbnmtwoxbTCFBukVQcszDAyvsd7+rTduPTXpygg==}
@@ -980,8 +981,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  aws-cdk-lib@2.274.0:
-    resolution: {integrity: sha512-jez6nnPRPGLRv6PfaVUdJNnIQN/5OQQRyQRfdf2lbkww5Z2W4FJ+RIEW1TpYgJ3oLXoM23f9LGA1kxoqvF/sFg==}
+  aws-cdk-lib@2.275.0:
+    resolution: {integrity: sha512-Gjj1tM3dQedhsI7MdwMvULF1PzgEO/zX0KFHU9xwZskkSL9057IZB4fJWm9nL+aaNU3TU+lNt8uB6d8QcZtUpQ==}
     engines: {node: '>= 20.0.0'}
     peerDependencies:
       constructs: ^10.5.0
@@ -3175,13 +3176,13 @@ snapshots:
 
   '@eslint/js@8.36.0': {}
 
-  '@guardian/cdk@64.2.0(aws-cdk-lib@2.274.0(constructs@10.8.1))(aws-cdk@2.1146.0)(constructs@10.8.1)':
+  '@guardian/cdk@64.2.0(aws-cdk-lib@2.275.0(constructs@10.8.1))(aws-cdk@2.1146.0)(constructs@10.8.1)':
     dependencies:
       '@aws-sdk/client-ec2': 3.1152.0
       '@aws-sdk/client-ssm': 3.1152.0
       '@aws-sdk/credential-providers': 3.1152.0
       aws-cdk: 2.1146.0
-      aws-cdk-lib: 2.274.0(constructs@10.8.1)
+      aws-cdk-lib: 2.275.0(constructs@10.8.1)
       chalk: 4.1.2
       codemaker: 1.141.0
       constructs: 10.8.1
@@ -3897,7 +3898,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  aws-cdk-lib@2.274.0(constructs@10.8.1):
+  aws-cdk-lib@2.275.0(constructs@10.8.1):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.292
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.3
